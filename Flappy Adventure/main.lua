@@ -80,7 +80,7 @@ function love.update(dt)
     
     bird:update(dt)
     
-    for k, pipe in pairs(pipePairs) do
+    for k, pair in pairs(pipePairs) do
         pair:update(dt)
     end
 
@@ -98,7 +98,7 @@ function love.draw()
     
     love.graphics.draw(background, -backgroundScroll, 0)
 
-    for k, pipe in pairs(pipePairs) do
+    for k, pair in pairs(pipePairs) do
         pair:render()
     end
     
