@@ -1,13 +1,15 @@
 push = require 'push'
 Class = require 'class'
-require 'Bird'
-require 'Pipe'
-require 'PipePair'
 require 'StateMachine'
 require 'states/BaseState'
+require 'states/CountdownState'
 require 'states/PlayState'
 require 'states/ScoreState'
 require 'states/TitleScreenState'
+
+require 'Bird'
+require 'Pipe'
+require 'PipePair'
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -25,13 +27,14 @@ local BACKGROUND_SCROLL_SPEED = 30
 local GROUND_SCROLL_SPEED = 60
 
 local BACKGROUND_LOOPING_POINT = 649
-local GROUND_LOOPING_POINT = 514
 
 local scrolling = true
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
+    math.randomseed(os.time())
+    
     love.window.setTitle('Flappy Adventure')
 
     smallFont = love.graphics.newFont('font.ttf', 8)
@@ -39,6 +42,17 @@ function love.load()
     flappyFont = love.graphics.newFont('flappy.ttf', 28)
     hugeFont = love.graphics.newFont('flappy.ttf', 56)
     love.graphics.setFont(flappyFont)
+    
+     sounds = {
+        ['jump'] = love.audio.newSource('jump.wav', 'static'),
+        ['explosion'] = love.audio.newSource('explosion.wav', 'static'),
+        ['hurt'] = love.audio.newSource('hurt.wav', 'static'),
+        ['score'] = love.audio.newSource('score.wav', 'static'),
+        ['music'] = love.audio.newSource('marios_way.mp3', 'static')
+    }
+    
+    sounds['music']:setLooping(true)
+    sounds['music']:play()
     
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         vsync = true,
@@ -48,12 +62,14 @@ function love.load()
     
     gStateMachine = StateMachine {
         ['title'] = function() return TitleScreenState() end,
+        ['countdown'] = function() return CountdownState() end,
         ['play'] = function() return PlayState() end,
         ['score'] = function() return ScoreState() end
     }
     gStateMachine:change('title')
     
     love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
 end
 
 function love.resize(w, h)
@@ -68,22 +84,28 @@ function love.keypressed(key)
     end
 end
 
+function love.mousepressed(x, y, button)
+    love.mouse.buttonsPressed[button] = true
+end
+
 function love.keyboard.wasPressed(key)
-    if love.keyboard.keysPressed[key] then
-        return true
-    else
-        return false
-    end
+    return love.keyboard.keysPressed[key]
+end
+
+function love.mouse.wasPressed(button)
+    return love.mouse.buttonsPressed[button]
 end
 
 function love.update(dt)
-    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % 
-        BACKGROUND_LOOPING_POINT
-    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % GROUND_LOOPING_POINT
+    if scrolling then
+       backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
+        groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
+    end
     
      gStateMachine:update(dt)
     
     love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
 end
 
 function love.draw()
