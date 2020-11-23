@@ -65,7 +65,7 @@ function love.update(dt)
     backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) 
         % BACKGROUND_LOOPING_POINT
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) 
-        % VIRTUAL_WIDTH
+        % GROUND_LOOPING_POINT
     
     spawnTimer = spawnTimer + dt
     
