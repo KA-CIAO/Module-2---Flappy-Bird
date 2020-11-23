@@ -82,7 +82,6 @@ function love.update(dt)
     
     for k, pipe in pairs(pipePairs) do
         pair:update(dt)
-        end
     end
 
     for k, pair in pairs(pipePairs) do
