@@ -26,7 +26,7 @@ local groundScroll = 0
 local BACKGROUND_SCROLL_SPEED = 30
 local GROUND_SCROLL_SPEED = 60
 
-local BACKGROUND_LOOPING_POINT = 649
+local BACKGROUND_LOOPING_POINT = 713
 
 local scrolling = true
 
