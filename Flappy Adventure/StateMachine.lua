@@ -5,7 +5,8 @@ function StateMachine:init(states)
 		render = function() end,
 		update = function() end,
 		enter = function() end,
-		exit = function() end
+		exit = function() end,
+		pause = function() end
 	}
 	self.states = states or {} 
 	self.current = self.empty
