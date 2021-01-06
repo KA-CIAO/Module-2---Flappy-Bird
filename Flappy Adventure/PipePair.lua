@@ -1,6 +1,6 @@
 PipePair = Class{}
 
-local GAP_HEIGHT = math.random(90, 130) #tower gap diff
+local GAP_HEIGHT = math.random(90, 130)
 
 function PipePair:init(y)
     self.scored = false
