@@ -1,6 +1,6 @@
 PipePair = Class{}
 
-local GAP_HEIGHT = 90
+local GAP_HEIGHT = math.random(90, 130) #tower gap diff
 
 function PipePair:init(y)
     self.scored = false
@@ -9,10 +9,11 @@ function PipePair:init(y)
 
     self.pipes = {
         ['upper'] = Pipe('top', self.y),
-        ['lower'] = Pipe('bottom', self.y + PIPE_HEIGHT + GAP_HEIGHT)
+        ['lower'] = Pipe('bottom', self.y + PIPE_HEIGHT + math.random(90, 130)
     }
 
     self.remove = false
+    scrolling = true
 end
 
 function PipePair:update(dt)
