@@ -21,12 +21,12 @@ function PlayState:update(dt)
 
     if self.timer > 2 then
         local y = math.max(-PIPE_HEIGHT + 10, 
-            math.min(self.lastY + math.random(-20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
+            math.min(self.lastY + math.random(-20, 20), VIRTUAL_HEIGHT - 105 - PIPE_HEIGHT))
         self.lastY = y
 
         table.insert(self.pipePairs, PipePair(y))
 
-        self.timer = 0
+        self.timer = math.random(-5, 5) / 10
     end
 
     for k, pair in pairs(self.pipePairs) do
@@ -55,6 +55,7 @@ function PlayState:update(dt)
                gStateMachine:change('score', {
                     score = self.score
                 })
+                self.score = 0
             end
         end
     end
@@ -67,6 +68,11 @@ function PlayState:update(dt)
         gStateMachine:change('score', {
             score = self.score
         })
+        self.score = 0
+    end
+    
+    if love.keyboard.wasPressed ('p') then
+            gStateMachine:change('pause')
     end
 end
 
@@ -79,13 +85,5 @@ function PlayState:render()
     love.graphics.print('Score: ' .. tostring(self.score), 8, 8)
     
     self.bird:render()
-end
-
-function PlayState:enter()
-    scrolling = true
-end
-
-function PlayState:exit()
-    scrolling = false
 end
     
